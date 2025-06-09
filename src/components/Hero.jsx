@@ -1,5 +1,9 @@
 import React from "react";
 import { useState, useRef } from "react";
+import Button from "./Button";
+import { TiLocationArrow } from "react-icons/ti";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
 const Hero = () => {
   const [currentIndex, setCurrentIndex] = useState(1);
   const [hasClicked, setHasClicked] = useState(false);
@@ -11,6 +15,48 @@ const Hero = () => {
     setHasClicked(true);
     setCurrentIndex(upcomingVideoIndex);
   };
+  useGSAP(
+    () => {
+      if (hasClicked) {
+        gsap.set("#next-video", { visibility: "visible" });
+        gsap.to("#next-video", {
+          transformOrigin: "center center",
+          scale: 1,
+          width: "100%",
+          height: "100%",
+          duration: 1,
+          ease: "power1.inOut",
+          onStart: () => {
+            nextVideoRef.current.play();
+          },
+        });
+        gsap.from("#curent-video", {
+          transformOrigin: "center center",
+          scale: 0,
+          duration: 1,
+          ease: "power1.inOut",
+        });
+      }
+    },
+    { dependencies: [currentIndex], revertOnUpdate: true }
+  );
+  useGSAP(() => {
+    gsap.set("#video-frame", {
+      clipPath: `polygon(14%,0%,72%,0%100% 100%,0% 100%)`,
+      borderRadius: "0 0 40% 10%",
+    });
+    gsap.from("#video-frame", {
+      clipPath: `polygon(14%,0%,72%,0%100% 100%,0% 100%)`,
+      borderRadius: "0 0 40% 10%",
+      ease: "power1.inOut",
+      scrollTrigger: {
+        trigger: "#video-frame",
+        start: "center center",
+        end: "bottom center",
+        scrub: true,
+      },
+    });
+  });
   const upcomingVideoIndex = (currentIndex % totalVideos) + 1;
   const getVideoSrc = (index) => `videos/hero-s${index}.mp4`;
   const handleVideoLoad = () => {
@@ -63,8 +109,27 @@ const Hero = () => {
         <h1 className="special-font hero-heading absolute bottom-5 right-5 z-40 text-blue-75">
           G<b>aming</b>
         </h1>
-        <div className="absolute left-0 top-0 z-40 size-full"></div>
+        <div className="absolute left-0 top-0 z-40 size-full">
+          <div className="mt-24 px-5 sm:px-10">
+            <h1 className="special-font hero-heading text-blue-100">
+              redifi<b>n</b>e
+            </h1>
+            <p className="mb-5 max-w-64 font-robert-regular text-blue-100">
+              Enter the Metagame Layer <br />
+              Unleash the Play Economy
+            </p>
+            <Button
+              id="watch-trailer"
+              title="Watch Trailer"
+              leftIcon={<TiLocationArrow />}
+              containerClass="!bg-yellow-300 flex-center gap-1"
+            />
+          </div>
+        </div>
       </div>
+      <h1 className="special-font hero-heading absolute bottom-5 right-5 z-40 text-black">
+        G<b>aming</b>
+      </h1>
     </div>
   );
 };
