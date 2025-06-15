@@ -1,13 +1,45 @@
-import React, { useRef, useState } from "react";
+import gsap from "gsap";
+import React, { use, useEffect, useRef, useState } from "react";
 import { TiLocationArrow } from "react-icons/ti";
+import { useWindowScroll } from "react-use";
 const navItems = ["Nexus", "Vault", "Prologue", "About", "Contact"];
 
 const Navbar = () => {
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
   const [isIndicatorActive, setIsIndicatorActive] = useState(false);
+  const [isNavVisible, setIsNavVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
   const navContainerRef = useRef(null);
   const audioElementRef = useRef(null);
-  const toggleAudioIndicator = () => {};
+  const { y: currentScrollY } = useWindowScroll();
+  useEffect(() => {
+    if (currentScrollY === 0) {
+      setIsNavVisible(true);
+      navContainerRef.current.classList.remove("floating-nav");
+    } else if (currentScrollY > lastScrollY) {
+      setIsNavVisible(false);
+      navContainerRef.current.classList.add("floating-nav");
+    } else if (currentScrollY < lastScrollY) {
+      setIsNavVisible(true);
+      navContainerRef.current.classList.add("floating-nav");
+    }
+    setLastScrollY(currentScrollY);
+  }, [currentScrollY]);
+  useEffect(() => {
+    gsap.to(navContainerRef, {
+      y: isNavVisible ? 0 : 1,
+      duration: 0.2,
+    });
+  }, [isNavVisible]);
+
+  const toggleAudioIndicator = () => {
+    setIsAudioPlaying((prev) => !prev);
+    setIsIndicatorActive((prev) => !prev);
+  };
+
+  useEffect(() => {
+    // You can add any side effects here if needed
+  }, []);
 
   return (
     <div
@@ -53,6 +85,7 @@ const Navbar = () => {
                     className={`indicator-line ${
                       isIndicatorActive ? "active" : ""
                     }`}
+                    style={{ animationDelay: `${bar * 0.1}s` }}
                   />
                 ))}
               </audio>
