@@ -1,8 +1,9 @@
 import gsap from "gsap";
-import React, { use, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { TiLocationArrow } from "react-icons/ti";
 import { useWindowScroll } from "react-use";
 const navItems = ["Nexus", "Vault", "Prologue", "About", "Contact"];
+import clsx from "clsx";
 
 const Navbar = () => {
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
@@ -26,8 +27,9 @@ const Navbar = () => {
     setLastScrollY(currentScrollY);
   }, [currentScrollY]);
   useEffect(() => {
-    gsap.to(navContainerRef, {
-      y: isNavVisible ? 0 : 1,
+    gsap.to(navContainerRef.current, {
+      y: isNavVisible ? 0 : -100,
+      opacity: isNavVisible ? 1 : 0,
       duration: 0.2,
     });
   }, [isNavVisible]);
@@ -50,7 +52,7 @@ const Navbar = () => {
         <nav className="flex size-full items-center justify-between p-4">
           <div className="flex items-center gap-7">
             <img src="/img/logo.png" alt="logo" className="w-10" />
-            <button
+            <Button
               id="product -button"
               title="Products"
               rightIcon={<TiLocationArrow />}
