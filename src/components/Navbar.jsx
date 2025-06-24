@@ -4,6 +4,7 @@ import { TiLocationArrow } from "react-icons/ti";
 import { useWindowScroll } from "react-use";
 const navItems = ["Nexus", "Vault", "Prologue", "About", "Contact"];
 import clsx from "clsx";
+import Button from "./Button";
 
 const Navbar = () => {
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
@@ -40,8 +41,9 @@ const Navbar = () => {
   };
 
   useEffect(() => {
-    // You can add any side effects here if needed
-  }, []);
+    if (isAudioPlaying) audioElementRef.current.play();
+    else audioElementRef.current.pause();
+  }, [isAudioPlaying]);
 
   return (
     <div
@@ -80,17 +82,16 @@ const Navbar = () => {
                 className="hidden"
                 src="/audio/loop.mp3"
                 loop
-              >
-                {[1, 2, 3, 4].map((bar) => (
-                  <div
-                    key={bar}
-                    className={`indicator-line ${
-                      isIndicatorActive ? "active" : ""
-                    }`}
-                    style={{ animationDelay: `${bar * 0.1}s` }}
-                  />
-                ))}
-              </audio>
+              />
+              {[1, 2, 3, 4].map((bar) => (
+                <div
+                  key={bar}
+                  className={clsx("indicator-line", {
+                    active: isIndicatorActive,
+                  })}
+                  style={{ animationDelay: `${bar * 0.1}s` }}
+                />
+              ))}
             </button>
           </div>
         </nav>

@@ -12,7 +12,7 @@ const Story = () => {
     gsap.to(element, {
       duration: 0.3,
       rotateX: 0,
-      rotateX: 0,
+      rotateY: 0,
 
       ease: "power1.inOut",
     });
@@ -31,7 +31,7 @@ const Story = () => {
     gsap.to(element, {
       duration: 0.3,
       rotateX,
-      rotateX,
+      rotateY,
       transformPerspective: 500,
       ease: "power1.inOut",
     });
@@ -44,9 +44,8 @@ const Story = () => {
         </p>
         <div className="relative size-full">
           <AnimatedTitle
-            title="The st<b>0</b>ry of <br/> a hidden realm"
-            sectionId="#story"
-            containerClass="mt-5 pointer-events-none mix-blend-difference relative z-10 "
+            title="the st<b>o</b>ry of <br /> a hidden real<b>m</b>"
+            containerClass="mt-5 pointer-events-none mix-blend-difference relative z-10"
           />
           <div className="story-img-container">
             <div className="story-img-mask">
@@ -54,8 +53,6 @@ const Story = () => {
                 <img
                   ref={frameRef}
                   onMouseLeave={handleMouseLeave}
-                  onMouseUp={handleMouseLeave}
-                  onMouseEnter={handleMouseLeave}
                   onMouseMove={handleMouseMove}
                   src="/img/entrance.webp"
                   alt="entrance"
